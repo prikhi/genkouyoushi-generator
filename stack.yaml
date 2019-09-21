@@ -1,0 +1,10 @@
+---
+
+resolver: lts-14.6
+
+packages:
+    - .
+
+flags:
+    diagrams:
+        rasterific: true

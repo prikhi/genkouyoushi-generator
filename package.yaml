@@ -1,0 +1,50 @@
+---
+
+name:
+    genkoyoushi-generator
+version:
+    0.1.0.0
+# synopsis:
+# description:
+homepage:
+    https://github.com/prikhi/genkoyoushi-generator#readme
+license:
+    GPL-3
+license-file:
+    LICENSE
+author:
+    Pavan Rikhi
+maintainer:
+    pavan.rikhi@gmail.com
+copyright:
+    2019 Pavan Rikhi
+category:
+    Graphics
+extra-source-files:
+    - README.md
+
+dependencies:
+    - base >= 4.7 && < 5
+
+ghc-options:
+    - -Wall
+    - -Wcompat
+    - -Wincomplete-record-updates
+    - -Wincomplete-uni-patterns
+    - -Wredundant-constraints
+
+library:
+    source-dirs: src
+    dependencies:
+        - diagrams
+        - diagrams-svg
+        - text
+
+executables:
+    genkoyoushi-gen:
+        main:
+            Main.hs
+        source-dirs:
+            app
+        dependencies:
+            - genkoyoushi-generator
