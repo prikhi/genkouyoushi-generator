@@ -84,6 +84,8 @@ data JoinDirection
     -- ^ Only Add Horizontal Spacing
     | JoinRows
     -- ^ Only Add Vertical Spacing
+    | JoinAll
+    -- ^ No Space Between Each Box
     deriving (Read, Show, Eq)
 
 
@@ -131,8 +133,9 @@ renderGrid = do
         boxSide              = min boxWidth_ boxHeight_
         (xSpacing, ySpacing) = case joinDirection_ of
             JoinNothing -> (boxSpacing_, boxSpacing_)
-            JoinRows    -> (0.0, boxSpacing_)
-            JoinColumns -> (boxSpacing_, 0.0)
+            JoinRows    -> (0, boxSpacing_)
+            JoinColumns -> (boxSpacing_, 0)
+            JoinAll -> (0, 0)
         xPadding =
             ( gWidth
                 - (boxSide * boxesPerRowFurigana)
