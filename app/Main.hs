@@ -3,7 +3,7 @@ module Main where
 import           Diagrams.Backend.Rasterific
 import           Diagrams.Size                  ( dims )
 
-import           Genkoyoushi                    ( usLetterVertical
+import           Genkouyoushi                   ( usLetterVertical
                                                 , render
                                                 )
 

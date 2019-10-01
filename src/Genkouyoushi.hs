@@ -1,4 +1,4 @@
-module Genkoyoushi where
+module Genkouyoushi where
 
 import           Control.Monad.Reader           ( ReaderT
                                                 , asks
