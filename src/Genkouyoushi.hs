@@ -21,7 +21,7 @@ import           Data.Scientific                ( Scientific )
 -- 2. define box size - calculate rows/columns
 -- TODO: Double sided mode. Generate a 2 page PDF for double sided
 -- printing, flipping the left & right margins for 2nd page.
--- TODO: Crosshair opacity
+-- TODO: Crosshair opacity, box outline opacity
 data Config = Config
     { dpi :: Integer
     -- ^ Dots Per Inch
