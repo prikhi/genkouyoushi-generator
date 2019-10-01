@@ -74,6 +74,7 @@ usLetterVertical = Config
     , joinDirection = JoinColumns
     }
 
+
 data JoinDirection
     = JoinNothing
     | JoinColumns
@@ -97,6 +98,7 @@ render = runIdentity . runReaderT render_
                   , strutY mBot
                   ]
             # bg white
+
 
 renderGrid :: ReaderT Config Identity (Diagram B)
 renderGrid = do
@@ -136,7 +138,7 @@ renderGrid = do
                 - (ySpacing * fromIntegral (boxesPerRow - 1))
                 )
                 / 2
-    kanaBox <- renderBox boxSide
+    kanaBox <- renderScaledBox boxSide
     let singleRow =
             hsep xSpacing $ replicate (fromIntegral boxesPerRow) kanaBox
         grid =
@@ -157,16 +159,14 @@ renderGrid = do
         mLeft  <- fromInches marginLeft
         mRight <- fromInches marginRight
         return $ total - mLeft - mRight
-    renderBox :: Double -> ReaderT Config Identity (Diagram B)
-    renderBox size = do
+    renderScaledBox :: Double -> ReaderT Config Identity (Diagram B)
+    renderScaledBox size = do
         withFurigana <- asks furiganaBoxes
-        return $ drawBox withFurigana # scale size
+        return $ renderBox withFurigana # scale size
 
 
-
-
-drawBox :: Bool -> Diagram B
-drawBox withFurigana = kanaBox ||| furiganaRect
+renderBox :: Bool -> Diagram B
+renderBox withFurigana = kanaBox ||| furiganaRect
   where
     kanaBox =
         square 1
