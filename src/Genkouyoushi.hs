@@ -1,6 +1,7 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Genkouyoushi where
 
-import           Control.Monad.Reader           ( ReaderT
+import           Control.Monad.Reader           ( MonadReader
                                                 , asks
                                                 , runReaderT
                                                 )
@@ -20,6 +21,7 @@ import           Data.Scientific                ( Scientific )
 -- 2. define box size - calculate rows/columns
 -- TODO: Double sided mode. Generate a 2 page PDF for double sided
 -- printing, flipping the left & right margins for 2nd page.
+-- TODO: Crosshair opacity
 data Config = Config
     { dpi :: Integer
     -- ^ Dots Per Inch
@@ -51,7 +53,7 @@ data Config = Config
 
 -- | Calculate the pixels given by an inch value in `Config`, using the
 -- defined DPI.
-fromInches :: (Config -> Scientific) -> ReaderT Config Identity Double
+fromInches :: MonadReader Config m => (Config -> Scientific) -> m Double
 fromInches selector = do
     dpi_ <- asks dpi
     val  <- asks selector
@@ -77,30 +79,35 @@ usLetterVertical = Config
 
 data JoinDirection
     = JoinNothing
+    -- ^ Add Vertical & Horizontal Space Between Each Box
     | JoinColumns
+    -- ^ Only Add Horizontal Spacing
     | JoinRows
+    -- ^ Only Add Vertical Spacing
     deriving (Read, Show, Eq)
 
 
 render :: Config -> Diagram B
-render = runIdentity . runReaderT render_
-  where
-    render_ = do
-        mTop    <- fromInches marginTop
-        mRight  <- fromInches marginRight
-        mBot    <- fromInches marginBottom
-        mLeft   <- fromInches marginLeft
-        boxGrid <- renderGrid
-        return
-            $ vcat
-                  [ strutY mTop
-                  , strutX mLeft ||| boxGrid ||| strutX mRight
-                  , strutY mBot
-                  ]
-            # bg white
+render = runIdentity . runReaderT renderPage
 
 
-renderGrid :: ReaderT Config Identity (Diagram B)
+renderPage :: MonadReader Config m => m (Diagram B)
+renderPage = do
+    mTop    <- fromInches marginTop
+    mRight  <- fromInches marginRight
+    mBot    <- fromInches marginBottom
+    mLeft   <- fromInches marginLeft
+    boxGrid <- renderGrid
+    return
+        $ vcat
+              [ strutY mTop
+              , strutX mLeft ||| boxGrid ||| strutX mRight
+              , strutY mBot
+              ]
+        # bg white
+
+
+renderGrid :: MonadReader Config m => m (Diagram B)
 renderGrid = do
     gHeight        <- gridHeight
     gWidth         <- gridWidth
@@ -149,17 +156,19 @@ renderGrid = do
         === strutY yPadding
         )
   where
+    gridHeight :: MonadReader Config m => m Double
     gridHeight = do
         total <- fromInches height
         mTop  <- fromInches marginTop
         mBot  <- fromInches marginBottom
         return $ total - mTop - mBot
+    gridWidth :: MonadReader Config m => m Double
     gridWidth = do
         total  <- fromInches width
         mLeft  <- fromInches marginLeft
         mRight <- fromInches marginRight
         return $ total - mLeft - mRight
-    renderScaledBox :: Double -> ReaderT Config Identity (Diagram B)
+    renderScaledBox :: MonadReader Config m => Double -> m (Diagram B)
     renderScaledBox size = do
         withFurigana <- asks furiganaBoxes
         return $ renderBox withFurigana # scale size
@@ -168,11 +177,14 @@ renderGrid = do
 renderBox :: Bool -> Diagram B
 renderBox withFurigana = kanaBox ||| furiganaRect
   where
+    kanaBox :: Diagram B
     kanaBox =
         square 1
             #  lwN 0.001
             <> crosshairs
             #  dashingN [0.0025, 0.0025] 0
             #  opacity 0.2
+    furiganaRect :: Diagram B
     furiganaRect = if withFurigana then rect 0.5 1 # lwN 0.0005 else mempty
-    crosshairs   = hrule 1 # lwN 0.001 <> vrule 1 # lwN 0.001
+    crosshairs :: Diagram B
+    crosshairs = hrule 1 # lwN 0.001 <> vrule 1 # lwN 0.001
