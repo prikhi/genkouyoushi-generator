@@ -1,13 +1,13 @@
 ---
 
 name:
-    genkoyoushi-generator
+    genkouyoushi-generator
 version:
     0.1.0.0
 # synopsis:
 # description:
 homepage:
-    https://github.com/prikhi/genkoyoushi-generator#readme
+    https://github.com/prikhi/genkouyoushi-generator#readme
 license:
     GPL-3
 license-file:
@@ -36,9 +36,12 @@ ghc-options:
 library:
     source-dirs: src
     dependencies:
-        - diagrams
-        - diagrams-svg
+        - colour
+        - diagrams-lib
+        - diagrams-rasterific
+        - mtl
         - text
+        - scientific
 
 executables:
     genkoyoushi-gen:
@@ -47,4 +50,6 @@ executables:
         source-dirs:
             app
         dependencies:
-            - genkoyoushi-generator
+            - genkouyoushi-generator
+            - diagrams-rasterific
+            - diagrams-lib
