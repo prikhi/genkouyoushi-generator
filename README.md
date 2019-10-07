@@ -24,7 +24,7 @@ Run `stack run -- --help` to see a full list of arguments that can be used to
 customize the generated paper.
 
 Run `stack install` to build & copy the `genkouyoushi-gen` executable to
-`~/.local/bin`, .
+`~/.local/bin`.
 
 
 ## License
