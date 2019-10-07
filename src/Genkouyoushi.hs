@@ -13,7 +13,8 @@ module Genkouyoushi
     , renderGrid
     , renderBox
     , fromInches
-    ) where
+    )
+where
 
 import           Control.Monad.Reader           ( MonadReader
                                                 , asks
@@ -141,12 +142,12 @@ renderGrid = do
     let boxesPerRowFurigana = if withFurigana
             then fromIntegral boxesPerRow * 1.5
             else fromIntegral boxesPerRow
-        boxWidth_ = if joinDirection_ == JoinRows
+        boxWidth_ = if joinDirection_ `elem` [JoinRows, JoinAll]
             then gWidth / boxesPerRowFurigana
             else
                 (gWidth - fromIntegral (boxesPerRow - 1) * boxSpacing_)
                     / boxesPerRowFurigana
-        boxHeight_ = if joinDirection_ == JoinColumns
+        boxHeight_ = if joinDirection_ `elem` [JoinColumns, JoinAll]
             then gHeight / fromIntegral boxesPerColumn
             else (gHeight - fromIntegral (boxesPerColumn - 1) * boxSpacing_)
                 / fromIntegral boxesPerColumn
