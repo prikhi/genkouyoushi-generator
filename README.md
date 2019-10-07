@@ -3,9 +3,9 @@
 A command line program to generate various formats of genkoyoushi
 paper for practicing your Kana/Kanji.
 
-Currently fixed to generating a 7x18 grid of boxes with furigana boxes in a
-column format for 8.5"x11" paper. Command line arguments will come soon,
-allowing different layouts and paper sizes.
+CLI parameters may be passed to customize the page size, margins, box
+count(rows/columns), presence of Furigana boxes, etc. Output formats include
+PNG, JPG, & PDF.
 
 
 ## Build / Run
@@ -16,11 +16,15 @@ installed. Then you can build & run the program:
 
 ```sh 
 stack build
-stack run
-gimp test.png
+stack run test.png
+feh test.png
 ```
 
-To install the executable to `~/.local/bin`, run `stack install`.
+Run `stack run -- --help` to see a full list of arguments that can be used to
+customize the generated paper.
+
+Run `stack install` to build & copy the `genkouyoushi-gen` executable to
+`~/.local/bin`, .
 
 
 ## License

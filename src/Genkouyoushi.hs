@@ -77,23 +77,6 @@ fromInches selector = do
     return . realToFrac $ fromIntegral dpi_ * val
 
 
-usLetterVertical :: Config
-usLetterVertical = Config
-    { dpi           = 300
-    , height        = 11
-    , width         = 8.5
-    , furiganaBoxes = True
-    , rows          = 18
-    , columns       = 7
-    , marginTop     = 0.75
-    , marginRight   = 0.5
-    , marginBottom  = 0.75
-    , marginLeft    = 0.5
-    , boxSpacing    = 0.25
-    , joinDirection = JoinColumns
-    }
-
-
 data JoinDirection
     = JoinNothing
     -- ^ Add Vertical & Horizontal Space Between Each Box

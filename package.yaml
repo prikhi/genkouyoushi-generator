@@ -25,6 +25,7 @@ extra-source-files:
 
 dependencies:
     - base >= 4.7 && < 5
+    - diagrams-lib
 
 ghc-options:
     - -Wall
@@ -37,19 +38,17 @@ library:
     source-dirs: src
     dependencies:
         - colour
-        - diagrams-lib
-        - diagrams-rasterific
         - mtl
-        - text
         - scientific
+        - text
 
 executables:
-    genkoyoushi-gen:
+    genkouyoushi-gen:
         main:
             Main.hs
         source-dirs:
             app
         dependencies:
             - genkouyoushi-generator
+            - cmdargs
             - diagrams-rasterific
-            - diagrams-lib
