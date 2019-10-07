@@ -1,4 +1,8 @@
+{-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE PartialTypeSignatures #-}
+{-# LANGUAGE TypeFamilies #-}
+{-# OPTIONS_GHC -fno-warn-partial-type-signatures #-}
 module Genkouyoushi where
 
 import           Control.Monad.Reader           ( MonadReader
@@ -6,13 +10,14 @@ import           Control.Monad.Reader           ( MonadReader
                                                 , runReaderT
                                                 )
 import           Data.Colour.Names              ( white )
+import           Data.Data                      ( Data
+                                                , Typeable
+                                                )
 import           Diagrams.Prelude        hiding ( height
                                                 , boxGrid
                                                 , width
                                                 , size
                                                 )
-import           Diagrams.Backend.Rasterific
-                                         hiding ( size )
 import           Data.Scientific                ( Scientific )
 
 
@@ -86,14 +91,14 @@ data JoinDirection
     -- ^ Only Add Vertical Spacing
     | JoinAll
     -- ^ No Space Between Each Box
-    deriving (Read, Show, Eq)
+    deriving (Read, Show, Eq, Data, Typeable)
 
 
-render :: Config -> Diagram B
+render :: _ => Config -> QDiagram b V2 Double Any
 render = runIdentity . runReaderT renderPage
 
 
-renderPage :: MonadReader Config m => m (Diagram B)
+renderPage :: (MonadReader Config m, Monad m, _) => m (QDiagram b V2 Double Any)
 renderPage = do
     mTop    <- fromInches marginTop
     mRight  <- fromInches marginRight
@@ -109,7 +114,7 @@ renderPage = do
         # bg white
 
 
-renderGrid :: MonadReader Config m => m (Diagram B)
+renderGrid :: (MonadReader Config m, _) => m (QDiagram b V2 Double Any)
 renderGrid = do
     gHeight        <- gridHeight
     gWidth         <- gridWidth
@@ -135,7 +140,7 @@ renderGrid = do
             JoinNothing -> (boxSpacing_, boxSpacing_)
             JoinRows    -> (0, boxSpacing_)
             JoinColumns -> (boxSpacing_, 0)
-            JoinAll -> (0, 0)
+            JoinAll     -> (0, 0)
         xPadding =
             ( gWidth
                 - (boxSide * boxesPerRowFurigana)
@@ -171,23 +176,23 @@ renderGrid = do
         mLeft  <- fromInches marginLeft
         mRight <- fromInches marginRight
         return $ total - mLeft - mRight
-    renderScaledBox :: MonadReader Config m => Double -> m (Diagram B)
+    renderScaledBox :: (MonadReader Config m, _) => n -> m (QDiagram b V2 n Any)
     renderScaledBox size = do
         withFurigana <- asks furiganaBoxes
         return $ renderBox withFurigana # scale size
 
 
-renderBox :: Bool -> Diagram B
+renderBox :: _ => Bool -> QDiagram b V2 n Any
 renderBox withFurigana = kanaBox ||| furiganaRect
   where
-    kanaBox :: Diagram B
+    kanaBox :: _ => QDiagram b V2 n Any
     kanaBox =
         square 1
             #  lwN 0.001
             <> crosshairs
             #  dashingN [0.0025, 0.0025] 0
             #  opacity 0.2
-    furiganaRect :: Diagram B
+    furiganaRect :: _ => QDiagram b V2 n Any
     furiganaRect = if withFurigana then rect 0.5 1 # lwN 0.0005 else mempty
-    crosshairs :: Diagram B
+    crosshairs :: _ => QDiagram b V2 n Any
     crosshairs = hrule 1 # lwN 0.001 <> vrule 1 # lwN 0.001
