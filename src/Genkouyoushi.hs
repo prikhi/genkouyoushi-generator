@@ -3,7 +3,17 @@
 {-# LANGUAGE PartialTypeSignatures #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# OPTIONS_GHC -fno-warn-partial-type-signatures #-}
-module Genkouyoushi where
+module Genkouyoushi
+    ( -- * Configuration
+      Config(..)
+    , JoinDirection(..)
+      -- * Rendering
+    , render
+    , renderPage
+    , renderGrid
+    , renderBox
+    , fromInches
+    ) where
 
 import           Control.Monad.Reader           ( MonadReader
                                                 , asks
@@ -17,6 +27,7 @@ import           Diagrams.Prelude        hiding ( height
                                                 , boxGrid
                                                 , width
                                                 , size
+                                                , render
                                                 )
 import           Data.Scientific                ( Scientific )
 
@@ -94,10 +105,12 @@ data JoinDirection
     deriving (Read, Show, Eq, Data, Typeable)
 
 
+-- | Render the diagram using the specified configuration.
 render :: _ => Config -> QDiagram b V2 Double Any
 render = runIdentity . runReaderT renderPage
 
 
+-- | Render the page margins & box grid.
 renderPage :: (MonadReader Config m, Monad m, _) => m (QDiagram b V2 Double Any)
 renderPage = do
     mTop    <- fromInches marginTop
@@ -114,6 +127,8 @@ renderPage = do
         # bg white
 
 
+-- | Render the box grid by calculating the box size, spacing, & padding
+-- and then building up a grid from a series of rows.
 renderGrid :: (MonadReader Config m, _) => m (QDiagram b V2 Double Any)
 renderGrid = do
     gHeight        <- gridHeight
@@ -182,6 +197,8 @@ renderGrid = do
         return $ renderBox withFurigana # scale size
 
 
+-- | Render a single kana box & crosshairs with an optional furigana box to
+-- the right of it.
 renderBox :: _ => Bool -> QDiagram b V2 n Any
 renderBox withFurigana = kanaBox ||| furiganaRect
   where
