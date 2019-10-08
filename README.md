@@ -10,6 +10,9 @@ The CLI program may be passed arguments to customize the page size, margins,
 box count(rows/columns), presence of Furigana boxes, etc. Output formats
 include PNG, JPG, & PDF.
 
+The API server accepts configuration parameters via JSON and replies with a
+bytestring of the generated PDF file.
+
 
 ## Build / Run
 
