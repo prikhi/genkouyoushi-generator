@@ -5,6 +5,10 @@ resolver: lts-14.6
 packages:
     - .
 
+extra-deps:
+    - git: https://github.com/diagrams/diagrams-rasterific.git
+      commit: 5823b3397fa44ca39dd8d196c1aefb8d2fe2d62a
+
 flags:
     diagrams:
         rasterific: true

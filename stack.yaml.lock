@@ -3,7 +3,21 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    cabal-file:
+      size: 3147
+      sha256: 51a77d86c975ce35111f12400de0abd695b204a64e281bff8b1f87c0f17c5996
+    name: diagrams-rasterific
+    version: 1.4.2
+    git: https://github.com/diagrams/diagrams-rasterific.git
+    pantry-tree:
+      size: 1663
+      sha256: 625b0af911f5a7f9d60a80c1228ea1d61997aa5af5db7154fed9fbadd4cfc1c6
+    commit: 5823b3397fa44ca39dd8d196c1aefb8d2fe2d62a
+  original:
+    git: https://github.com/diagrams/diagrams-rasterific.git
+    commit: 5823b3397fa44ca39dd8d196c1aefb8d2fe2d62a
 snapshots:
 - completed:
     size: 524127

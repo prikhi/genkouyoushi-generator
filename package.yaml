@@ -4,10 +4,13 @@ name:
     genkouyoushi-generator
 version:
     0.1.0.0
-# synopsis:
+synopsis:
+    Generate Genkouyoushi Paper for Japanese Writing Practice
 # description:
 homepage:
     https://github.com/prikhi/genkouyoushi-generator#readme
+github:
+    prikhi/genkouyoushi-generator
 license:
     GPL-3
 license-file:
@@ -52,3 +55,17 @@ executables:
             - genkouyoushi-generator
             - cmdargs
             - diagrams-rasterific
+    genkouyoushi-api:
+        main:
+            Main.hs
+        source-dirs:
+            api
+        dependencies:
+            - genkouyoushi-generator
+            - aeson
+            - bytestring
+            - diagrams-rasterific
+            - servant-server
+            - wai
+            - wai-extra
+            - warp
