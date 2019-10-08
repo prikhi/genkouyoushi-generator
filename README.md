@@ -1,5 +1,8 @@
 # Genkouyoushi Paper Generator
 
+[![Genkouyoushi Generator Build Status](https://travis-ci.org/prikhi/genkouyoushi-generator.svg?branch=master)](https://travis-ci.org/prikhi/genkouyoushi-generator)
+
+
 A command line program to generate various formats of genkoyoushi
 paper for practicing your Kana/Kanji.
 
